@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	default-destroy-method="close">
+
+	<!-- Properties -->
+	<bean id="propsPlaceholder"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<array>
+				<value>classpath:application.properties</value>
+			</array>
+		</property>
+		<property name="ignoreResourceNotFound">
+			<value>true</value>
+		</property>
+		<!-- Allow properties to be overridden in setenv for the various environments. -->
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+	</bean>
+
+	<bean id="test" class="org.drumm.mosaic.kids.ratios.test.TestResource">
+	</bean>
+
+	<!-- <import resource="mongo-stores.xml" />-->
+	 <import resource="memory-stores.xml" />
+
+	<bean id="ratioService" class="org.drumm.mosaic.kids.ratios.service.KidsRatioService">
+		<constructor-arg ref="roomStore"></constructor-arg>
+		<constructor-arg ref="ratioStore"></constructor-arg>
+	</bean>
+
+	<bean id="ratioResource" class="org.drumm.mosaic.kids.ratios.service.KidsRatioResource">
+		<constructor-arg ref="ratioService"></constructor-arg>
+	</bean>
+</beans>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	default-destroy-method="close">
+	<bean id="provider"
+		class="org.drumm.mosaic.kids.ratios.store.mongo.MongoCollectionProvider">
+		<constructor-arg value="${mongo.hostname}"></constructor-arg>
+		<constructor-arg value="${mongo.port}"></constructor-arg>
+		<constructor-arg value="${mongo.database}"></constructor-arg>
+		<constructor-arg value="${mongo.user}"></constructor-arg>
+		<constructor-arg value="${mongo.password}"></constructor-arg>
+	</bean>
+
+	<bean id="roomStore"
+		class="org.drumm.mosaic.kids.ratios.store.mongo.MongoKidsRoomStore">
+		<constructor-arg index="0" ref="provider"></constructor-arg>
+		<constructor-arg value="${mongo.collection.room}${mongo.collection.postfix}"></constructor-arg>
+
+	</bean>
+
+	<bean id="ratioStore"
+		class="org.drumm.mosaic.kids.ratios.store.mongo.MongoRatioStore">
+		<constructor-arg>
+			<ref bean="provider"></ref>
+		</constructor-arg>
+		<constructor-arg
+			value="${mongo.collection.ratio}${mongo.collection.postfix}"></constructor-arg>
+	</bean>
+</beans>
